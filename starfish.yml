@@ -4,9 +4,9 @@
   vars:
  # Используйте это при первом запуске этого скрипта
     current_mysql_root_password: ""
-    updated_mysql_root_password: "YouNeedAReallyGoodPassword"
+    updated_mysql_root_password: "12345"
     current_mysql_asterisk_password: ""
-    updated_mysql_asterisk_password: "YouNeedAReallyGoodPasswordHereToo"
+    updated_mysql_asterisk_password: "12345"
  # Закомментируйте вышеизложенное после первого запуска
  # Раскомментируйте строки ниже для последующих запусков этого скрипта
  # current_mysql_root_password: "YouNeedAReallyGoodPassword"
@@ -53,20 +53,20 @@
   - name: update mysql root pass for localhost root account from local servers
     mysql_user:
       login_user: root
-      login_password: "{{ current_mysql_root_password }}"
+      login_password: "{{12345}}"
       name: root
       host: "{{ item }}"
-      password: "{{ updated_mysql_root_password }}"
+      password: "{{12345}}"
     with_items:
       - localhost
 
   - name: update mysql root password for all other local root accounts
     mysql_user:
       login_user: root
-      login_password: "{{ updated_mysql_root_password }}"
+      login_password: "{{12345}}"
       name: root
       host: "{{ item }}"
-      password: "{{ updated_mysql_root_password }}"
+      password: "{{12345}}"
     with_items:
       - "{{ inventory_hostname }}"
       - 127.0.0.1
@@ -76,17 +76,17 @@
   - name: create asterisk database
     mysql_db:
       login_user: root
-      login_password: "{{ updated_mysql_root_password }}"
+      login_password: "{{12345}}"
       name: asterisk
       state: present
 
   - name: asterisk mysql user
     mysql_user:
       login_user: root
-      login_password: "{{ updated_mysql_root_password }}"
+      login_password: "{{12345}}"
       name: asterisk
       host: "{{ item }}"
-      password: "{{ updated_mysql_asterisk_password }}"
+      password: "{{12345}}"
       priv: "asterisk.*:ALL"
     with_items:
       - "{{ inventory_hostname }}"
@@ -98,7 +98,7 @@
   - name: remove anonymous user
     mysql_user:
       login_user: root
-      login_password: "{{ updated_mysql_root_password }}"
+      login_password: "{{12345}}"
       name: ""
       state: absent
       host: "{{ item }}"
@@ -112,7 +112,7 @@
   - name: remove test database
     mysql_db:
       login_user: root
-      login_password: "{{ updated_mysql_root_password }}"
+      login_password: "{{12345}}"
       name: test
       state: absent
 
@@ -188,6 +188,6 @@
         Port = 3306
         Database = asterisk
         UserName = asterisk
-        Password = {{ updated_mysql_asterisk_password }}
+        Password = {{12345}}
         #Socket = /var/run/mysqld/mysqld.sock
         Socket = /var/lib/mysql/mysql.sock
