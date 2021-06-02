@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: asterisk
+  labels:
+    app: ast
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ast
+  template:
+    metadata:
+      labels:
+        app: ast
+    spec:
+      containers:
+      - name: aster
+        image: docker.io/relax27/asterisk:latest
