@@ -1,0 +1,13 @@
+FROM centos:7
+RUN yum install -y make epel-release dmidecode gcc-c++ ncurses-devel libxml2-devel wget openssl-devel newt-devel kernel-devel sqlite-devel libuuid-devel gtk2-devel jansson-devel binutils-devel libedit-devel bzip2 patch libtool libtool-devel autotools-dev mysql-connector-odbc libiodbc libiodbc-devel initscripts
+COPY ./asterisk-16.16.1 /asterisk-16.16.1/
+RUN /asterisk-16.16.1/contrib/scripts/install_prereq install
+RUN cd /asterisk-16.16.1 && ./configure --with-jansson-bundled
+RUN cd /asterisk-16.16.1 && make
+RUN cd /asterisk-16.16.1 && make install
+RUN cd /asterisk-16.16.1 && make config
+COPY ./aster_from_container /etc/asterisk/
+COPY ./contrib_conf /asterisk-16.16.1/contrib/ast-db-manage/
+COPY ./odbcinst.ini /etc/odbcinst.ini
+COPY ./aster_odbc /etc
+ENTRYPOINT /etc/init.d/asterisk start && sleep 5 && asterisk -r
